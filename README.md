@@ -26,7 +26,7 @@ knowledge and get everyone started all in one place.
 
 ## What this Repo is
 
-A quick and easy way to get rolling with Python 3, Flask 1.1.2, the 
+A quick and easy way to get rolling with Python 3, Flask 1.1.2, the
 Flask-RESTful framework for building an API, database storage with PostgreSQL,
 TDD with test coverage built in, and deployment notes on continuous integration
 with Travis-CI which deploys to Heroku afterward.
@@ -138,7 +138,7 @@ Let's assume your project is called "shield":
 createdb shield_dev
 createdb shield_test
 
-export DATABASE_URL=postgresql://localhost:5432/shield_dev
+export DATABASE_URL=postgresql://localhost:5432/untangled_dev
 
 # examine any database models you have set up
 python3 manage.py db migrate
@@ -147,7 +147,7 @@ python3 manage.py db migrate
 python3 manage.py db upgrade
 
 # then apply the same for your test database:
-export DATABASE_URL=postgresql://localhost:5432/shield_test
+export DATABASE_URL=postgresql://localhost:5432/untangled_test
 python3 manage.py db upgrade
 
 ```
@@ -160,7 +160,7 @@ To roll back a database change, use "downgrade" instead of "upgrade".
 
 The code will use an environment variable called DATABASE_URL that you will
 need to set on Travis-CI and on Heroku. Your Travis-CI setting for this flag
-will be something like what you have above for your test database, since 
+will be something like what you have above for your test database, since
 PostgreSQL will be running on "localhost" on Travis-CI.
 
 On Heroku, though, you'll need to get your database credentials from the Heroku
@@ -180,13 +180,13 @@ The Profile provided should be all you need.
 web: gunicorn run:app
 ```
 
-At a high level, `gunicorn` is a production-ready HTTP request/response 
+At a high level, `gunicorn` is a production-ready HTTP request/response
 handler. It will execute your "runner" file, in this case the `run:` portion
 of the Procfile references your `run.py` script. If you change the runner
 filename, you'll need to change it here too (just without the .py extension).
 
 The `:app` portion references the variable in `run.py` on line 10 that it uses
-to actually execute your Flask application. 
+to actually execute your Flask application.
 
 
 ## Travis-CI Setup
@@ -223,7 +223,7 @@ rm -rf .pytest_cache/ coverage_html_report/ .coverage
 
 # set your database url for your test database and use 'coverage' to launch
 # pytest
-DATABASE_URL=postgresql://localhost/shield_test coverage run -m pytest
+DATABASE_URL=postgresql://localhost/untangled_test coverage run -m pytest
 
 # generate the HTML reports
 coverage html
@@ -287,7 +287,7 @@ Response Body: (TBD)
   "results": [
     {
       "id": 1,
-      "username": "ian",
+      "name": "ian",
       "email": "ian.douglas@iandouglas.com",
       "links": {
         "get": "/api/v1/users/1",
@@ -296,7 +296,7 @@ Response Body: (TBD)
         "index": "/api/v1/users"
       }
     },
-    {...} 
+    {...}
   ]
 }
 ```
@@ -319,7 +319,7 @@ Response Body: (TBD)
 {
   "success": true,
   "id": 1,
-  "username": "ian",
+  "name": "ian",
   "email": "ian.douglas@iandouglas.com",
   "links": {
     "get": "/api/v1/users/1",
@@ -335,7 +335,7 @@ Response Body: (TBD)
 
 Description:
 - deletes one user from the database
-- returns 204 status on success 
+- returns 204 status on success
 
 Required Request Headers:
 - none
@@ -358,11 +358,11 @@ Required Request Headers:
 
 Required Request Body:
 - JSON payload of:
-  - 'username', required, must be unique, cannot be blank
+  - 'name', required, must be unique, cannot be blank
   - 'email', required, must be unique, cannot be blank
 ```json
 {
-  "username": "ian",
+  "name": "ian",
   "email": "ian.douglas@iandouglas.com"
 }
 ```
@@ -374,7 +374,7 @@ Response Body: (TBD)
 {
   "success": true,
   "id": 1,
-  "username": "ian",
+  "name": "ian",
   "email": "ian.douglas@iandouglas.com",
   "links": {
     "get": "/api/v1/users/1",
@@ -394,11 +394,11 @@ Required Request Headers:
 
 Required Request Body:
 - JSON payload of:
-  - 'username', optional, must be unique, cannot be blank
+  - 'name', optional, must be unique, cannot be blank
   - 'email', optional, must be unique, cannot be blank
 ```json
 {
-  "username": "ian",
+  "name": "ian",
   "email": "ian.douglas@iandouglas.com"
 }
 ```
@@ -410,7 +410,7 @@ Response Body: (TBD)
 {
   "success": true,
   "id": 1,
-  "username": "ian",
+  "name": "ian",
   "email": "ian.douglas@iandouglas.com",
   "links": {
     "get": "/api/v1/users/1",
