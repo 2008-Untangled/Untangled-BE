@@ -1,6 +1,6 @@
 language: python
 python:
-- '3.8'
+- '3.9.1'
 services:
 - postgresql
 addons:
@@ -9,19 +9,19 @@ install:
 - pip install -r requirements.txt
 before_script:
 - psql --version
-- psql -c 'create database yourdatabase_test;' -U postgres
+- psql -c 'create database untangled_test;' -U postgres
 - python manage.py db upgrade
 script:
 - pytest
-deploy:
-  provider: heroku
-  api_key:
-    secure:
-  app: your-heroku-app-name
-  on:
-    repo: githubu_sername/repo_name
-    branch: main
-  skip_cleanup: 'true'
-  run:
-    - pip install -r requirements.txt
-    - python manage.py db upgrade
+# deploy:
+#   provider: heroku
+#   api_key:
+#     secure:
+#   app: your-heroku-app-name
+#   on:
+#     repo: githubu_sername/repo_name
+#     branch: main
+#   skip_cleanup: 'true'
+#   run:
+#     - pip install -r requirements.txt
+#     - python manage.py db upgrade

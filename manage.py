@@ -24,7 +24,7 @@ def db_seed():
     db.create_all()
 
     # seed anything here we might need
-    user = User(username='iandouglas', email='ian.douglas@iandouglas.com')
+    user = User(name='iandouglas', email='ian.douglas@iandouglas.com')
     db.session.add(user)
 
     db.session.commit()

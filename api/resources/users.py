@@ -28,7 +28,7 @@ def _validate_field(data, field, proceed, errors, missing_okay=False):
 def _user_payload(user):
     return {
         'id': user.id,
-        'username': user.username,
+        'name': user.name,
         'email': user.email,
         'links': {
             'get': f'/api/v1/users/{user.id}',
@@ -53,13 +53,13 @@ class UsersResource(Resource):
         errors = []
 
         proceed, user_name, errors = _validate_field(
-            data, 'username', proceed, errors)
+            data, 'name', proceed, errors)
         proceed, user_email, errors = _validate_field(
             data, 'email', proceed, errors)
 
         if proceed:
             user = User(
-                username=user_name,
+                name=user_name,
                 email=user_email
             )
             db.session.add(user)
@@ -83,7 +83,7 @@ class UsersResource(Resource):
 
     def get(self, *args, **kwargs):
         users = User.query.order_by(
-            User.username.asc()
+            User.name.asc()
         ).all()
         results = [_user_payload(user) for user in users]
         return {
@@ -123,8 +123,8 @@ class UserResource(Resource):
         proceed = True
         errors = []
         data = json.loads(request.data)
-        proceed, username, errors = _validate_field(
-            data, 'username', proceed, errors, missing_okay=True)
+        proceed, name, errors = _validate_field(
+            data, 'name', proceed, errors, missing_okay=True)
         proceed, email, errors = _validate_field(
             data, 'email', proceed, errors, missing_okay=True)
 
@@ -135,8 +135,8 @@ class UserResource(Resource):
                 'errors': errors
             }, 400
 
-        if username and len(username.strip()) > 0:
-            user.username = username
+        if name and len(name.strip()) > 0:
+            user.name = name
         if email:
             user.email = email
         user.update()
