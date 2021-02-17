@@ -23,9 +23,9 @@ class GetUsersTest(unittest.TestCase):
 
 class GetAllUsersTest(GetUsersTest):
     def test_happypath_get_all_users(self):
-        user_1 = User(username='zzz 1', email='email 1')
+        user_1 = User(name='zzz 1', email='email 1')
         user_1.insert()
-        user_2 = User(username='aaa 1', email='email 2')
+        user_2 = User(name='aaa 1', email='email 2')
         user_2.insert()
 
         response = self.client.get(
@@ -40,10 +40,10 @@ class GetAllUsersTest(GetUsersTest):
         results = data['results']
 
         # we expect user 2 first to ensure we're getting results in
-        # ascending alphabetical order by username
+        # ascending alphabetical order by name
         next_result = results[0]
         assert_payload_field_type_value(
-            self, next_result, 'username', str, user_2.username
+            self, next_result, 'name', str, user_2.name
         )
         assert_payload_field_type_value(
             self, next_result, 'email', str, user_2.email
@@ -68,7 +68,7 @@ class GetAllUsersTest(GetUsersTest):
 
         next_result = results[1]
         assert_payload_field_type_value(
-            self, next_result, 'username', str, user_1.username
+            self, next_result, 'name', str, user_1.name
         )
         assert_payload_field_type_value(
             self, next_result, 'email', str, user_1.email

@@ -17,7 +17,7 @@ class CreateUserTest(unittest.TestCase):
 
         # adding extra padding in here to ensure we strip() it off later
         self.payload = {
-            'username': ' new_username ',
+            'name': ' new_name ',
             'email': ' new_email ',
         }
 
@@ -41,7 +41,7 @@ class CreateUserTest(unittest.TestCase):
         assert_payload_field_type(self, data, 'id', int)
         user_id = data['id']
         assert_payload_field_type_value(
-            self, data, 'username', str, payload['username'].strip()
+            self, data, 'name', str, payload['name'].strip()
         )
         assert_payload_field_type_value(
             self, data, 'email', str, payload['email'].strip()
@@ -62,9 +62,9 @@ class CreateUserTest(unittest.TestCase):
             self, links, 'index', str, '/api/v1/users'
         )
 
-    def test_sadpath_missing_username(self):
+    def test_sadpath_missing_name(self):
         payload = deepcopy(self.payload)
-        del payload['username']
+        del payload['name']
         response = self.client.post(
             '/api/v1/users', json=payload,
             content_type='application/json'
@@ -76,12 +76,12 @@ class CreateUserTest(unittest.TestCase):
         assert_payload_field_type_value(self, data, 'error', int, 400)
         assert_payload_field_type_value(
             self, data, 'errors', list,
-            ["required 'username' parameter is missing"]
+            ["required 'name' parameter is missing"]
         )
 
-    def test_sadpath_blank_username(self):
+    def test_sadpath_blank_name(self):
         payload = deepcopy(self.payload)
-        payload['username'] = ''
+        payload['name'] = ''
         response = self.client.post(
             '/api/v1/users', json=payload,
             content_type='application/json'
@@ -93,7 +93,7 @@ class CreateUserTest(unittest.TestCase):
         assert_payload_field_type_value(self, data, 'error', int, 400)
         assert_payload_field_type_value(
             self, data, 'errors', list,
-            ["required 'username' parameter is blank"]
+            ["required 'name' parameter is blank"]
         )
 
     def test_sadpath_missing_email(self):

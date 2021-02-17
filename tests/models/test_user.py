@@ -19,16 +19,16 @@ class AppTest(unittest.TestCase):
         self.app_context.pop()
 
     def test_user_model(self):
-        user = User(username='ian', email='ian.douglas@iandouglas.com')
+        user = User(name='ian', email='ian.douglas@iandouglas.com')
         user.insert()
 
         self.assertIsInstance(user, User)
         self.assertIsNotNone(user.id)
-        self.assertEqual('ian', user.username)
+        self.assertEqual('ian', user.name)
         self.assertEqual('ian.douglas@iandouglas.com', user.email)
 
     def test_user_model_with_forced_id(self):
-        user = User(username='ian',
+        user = User(name='ian',
                     email='ian.douglas@iandouglas.com',
                     user_id=1)
         user.insert()
@@ -36,27 +36,37 @@ class AppTest(unittest.TestCase):
         self.assertIsInstance(user, User)
         self.assertIsNotNone(user.id)
         self.assertEqual(1, user.id)
-        self.assertEqual('ian', user.username)
+        self.assertEqual('ian', user.name)
         self.assertEqual('ian.douglas@iandouglas.com', user.email)
 
-    def test_user_model_trimmed_username(self):
-        user = User(username=' ian ', email='ian.douglas@iandouglas.com')
+    def test_user_model_trimmed_name(self):
+        user = User(name=' ian ', email='ian.douglas@iandouglas.com')
         user.insert()
 
-        self.assertEqual('ian', user.username)
+        self.assertEqual('ian', user.name)
 
     def test_user_model_trimmed_email(self):
-        user = User(username='ian', email=' ian.douglas@iandouglas.com ')
+        user = User(name='ian', email=' ian.douglas@iandouglas.com ')
         user.insert()
 
         self.assertEqual('ian.douglas@iandouglas.com', user.email)
 
-    def test_user_model_unique_username(self):
-        user = User(username='ian', email='ian.douglas@iandouglas.com')
+    def test_user_model_allow_duplicate_names(self):
+        user = User(name='ian', email='ian.douglas@iandouglas.com')
         user.insert()
 
         try:
-            user = User(username='ian', email='ian.douglas+2@iandouglas.com')
+            user = User(name='ian', email='ian.douglas+2@iandouglas.com')
+            user.insert()
+        except IntegrityError:
+            self.assertTrue(False)
+        else:
+            # we should not end up in here
+            self.assertTrue(True)  # pragma: no cover
+
+    def test_user_model_blank_name(self):
+        try:
+            user = User(name='', email='ian.douglas@iandouglas.com')
             user.insert()
         except IntegrityError:
             self.assertTrue(True)
@@ -64,19 +74,9 @@ class AppTest(unittest.TestCase):
             # we should not end up in here
             self.assertTrue(False)  # pragma: no cover
 
-    def test_user_model_blank_username(self):
+    def test_user_model_missing_name(self):
         try:
-            user = User(username='', email='ian.douglas@iandouglas.com')
-            user.insert()
-        except IntegrityError:
-            self.assertTrue(True)
-        else:
-            # we should not end up in here
-            self.assertTrue(False)  # pragma: no cover
-
-    def test_user_model_missing_username(self):
-        try:
-            user = User(username=None, email='ian.douglas@iandouglas.com')
+            user = User(name=None, email='ian.douglas@iandouglas.com')
             user.insert()
         except IntegrityError:
             self.assertTrue(True)
@@ -85,11 +85,11 @@ class AppTest(unittest.TestCase):
             self.assertTrue(False)  # pragma: no cover
 
     def test_user_model_unique_email(self):
-        user = User(username='ian', email='ian.douglas@iandouglas.com')
+        user = User(name='ian', email='ian.douglas@iandouglas.com')
         user.insert()
 
         try:
-            user = User(username='ian2', email='ian.douglas@iandouglas.com')
+            user = User(name='ian2', email='ian.douglas@iandouglas.com')
             user.insert()
         except IntegrityError:
             self.assertTrue(True)
@@ -99,7 +99,7 @@ class AppTest(unittest.TestCase):
 
     def test_user_model_blank_email(self):
         try:
-            user = User(username='ian', email='')
+            user = User(name='ian', email='')
             user.insert()
         except IntegrityError:
             self.assertTrue(True)
@@ -109,7 +109,7 @@ class AppTest(unittest.TestCase):
 
     def test_user_model_missing_email(self):
         try:
-            user = User(username='ian', email=None)
+            user = User(name='ian', email=None)
             user.insert()
         except IntegrityError:
             self.assertTrue(True)
