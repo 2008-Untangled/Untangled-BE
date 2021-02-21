@@ -2,7 +2,7 @@ import unittest
 from sqlalchemy.exc import IntegrityError
 
 from api import create_app, db
-from api.database.models import Room
+from api.database.models import User, Room
 
 
 class AppTest(unittest.TestCase):
