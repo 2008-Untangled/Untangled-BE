@@ -1,5 +1,6 @@
 import bleach
-from sqlalchemy import Column, String, Integer
+from sqlalchemy import Column, String, Integer, ForeignKey
+from sqlalchemy.orm import relationship
 from api import db
 
 
@@ -15,6 +16,8 @@ class User(db.Model):
     name = Column(String(80), nullable=False)
     # unique email
     email = Column(String(100), unique=True, nullable=False)
+
+    rooms = relationship("Room")
 
     def __init__(self, name, email, user_id=None):
         if name is not None:
@@ -53,5 +56,42 @@ class User(db.Model):
         deletes model from database
         the model must exist in the database
         """
+        db.session.delete(self)
+        db.session.commit()
+
+class Room(db.Model):
+    """
+    Room Model
+    """
+    __tablename__ = 'rooms'
+
+    id = Column(Integer, primary_key=True)
+    name = Column(String(80), nullable=False)
+    image = Column(String(255))
+    user_id = Column(Integer, ForeignKey('users.id'))
+
+    def __init__(self, name, image, user_id):
+        if name is not None:
+            name = bleach.clean(name).strip()
+            if name == '':
+                name = None
+
+        if image is not None:
+            image = bleach.clean(image).strip()
+            if image == '':
+                image = None
+
+        self.name = name
+        self.image = image
+        self.user_id = user_id
+
+    def insert(self):
+        db.session.add(self)
+        db.session.commit()
+
+    def update(self):
+        db.session.commit()
+
+    def delete(self):
         db.session.delete(self)
         db.session.commit()
