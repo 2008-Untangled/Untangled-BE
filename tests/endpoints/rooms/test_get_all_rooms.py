@@ -48,7 +48,7 @@ class GetAllRoomsTest(GetRoomsTest):
       self, first_result, 'image', str, room_1.image
     )
     assert_payload_field_type_value(
-      self, first_result, 'user_id', str, room_1.user_id
+      self, first_result, 'user_id', int, room_1.user_id
     )
 
     second_result = results[1]
@@ -59,7 +59,7 @@ class GetAllRoomsTest(GetRoomsTest):
       self, second_result, 'image', str, room_2.image
     )
     assert_payload_field_type_value(
-      self, second_result, 'user_id', str, room_2.user_id
+      self, second_result, 'user_id', int, room_2.user_id
     )
 
   def test_happypath_get_empty_rooms(self):
@@ -69,7 +69,6 @@ class GetAllRoomsTest(GetRoomsTest):
     response = self.client.get(
       f'/api/v1/users/{user_1.id}/rooms'
     )
-
     self.assertEqual(200, response.status_code)
 
     data = json.loads(response.data.decode('utf-8)'))
