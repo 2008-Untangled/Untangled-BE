@@ -17,9 +17,9 @@ script:
 #   provider: heroku
 #   api_key:
 #     secure:
-#   app: your-heroku-app-name
+#   app: untangled-be
 #   on:
-#     repo: githubu_sername/repo_name
+#     repo: 2008-Untangled/Untangled-BE
 #     branch: main
 #   skip_cleanup: 'true'
 #   run:
