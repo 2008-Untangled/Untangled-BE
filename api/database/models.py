@@ -95,3 +95,61 @@ class Room(db.Model):
     def delete(self):
         db.session.delete(self)
         db.session.commit()
+
+class Memory(db.Model):
+    """
+    Memory Model
+    """
+    __tablename__ = 'memories'
+
+    id = Column(Integer, primary_key=True)
+    image = Column(String(255), nullable=True)
+    song = Column(String(255))
+    description = Column(String(255))
+    aromas = Column(String(80))
+    location = Column(String(80))
+    room_id = Column(Integer, ForeignKey('rooms.id'))
+
+    def __init__(self, image, song, description, aromas, location, room_id):
+        if image is not None:
+            image = bleach.clean(image).strip()
+            if image == '':
+                image = None
+
+        if song is not None:
+            song = bleach.clean(song).strip()
+            if song == '':
+                song = None
+
+        if description is not None:
+            description = bleach.clean(description).strip()
+            if description == '':
+                description = None
+
+        if aromas is not None:
+            aromas = bleach.clean(aromas).strip()
+            if aromas == '':
+                aromas = None
+
+        if location is not None:
+            location = bleach.clean(location).strip()
+            if location == '':
+                location = None
+
+        self.image = image
+        self.song = song
+        self.description = description
+        self.aromas = aromas
+        self.location = location
+        self.room_id = room_id
+
+    def insert(self):
+        db.session.add(self)
+        db.session.commit()
+
+    def update(self):
+        db.session.commit()
+
+    def delete(self):
+        db.session.delete(self)
+        db.session.commit()
