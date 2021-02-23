@@ -80,9 +80,11 @@ def create_app(config_name='default'):
 
     from api.resources.users import UsersResource, UserResource
     from api.resources.rooms import RoomsResource
+    from api.resources.memories import MemoriesResource
 
     api.add_resource(RoomsResource, '/api/v1/users/<user_id>/rooms')
     api.add_resource(UserResource, '/api/v1/users/<user_id>')
     api.add_resource(UsersResource, '/api/v1/users')
+    api.add_resource(MemoriesResource, '/api/v1/rooms/<room_id>/memories')
 
     return app
