@@ -79,12 +79,13 @@ def create_app(config_name='default'):
         }), 404
 
     from api.resources.users import UsersResource, UserResource
-    from api.resources.rooms import RoomsResource
+    from api.resources.rooms import RoomsResource, RoomResource
     from api.resources.memories import MemoriesResource
 
     api.add_resource(RoomsResource, '/api/v1/users/<user_id>/rooms')
     api.add_resource(UserResource, '/api/v1/users/<user_id>')
     api.add_resource(UsersResource, '/api/v1/users')
     api.add_resource(MemoriesResource, '/api/v1/rooms/<room_id>/memories')
+    api.add_resource(RoomResource, '/api/v1/rooms/<room_id>')
 
     return app
