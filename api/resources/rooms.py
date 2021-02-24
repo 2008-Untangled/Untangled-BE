@@ -43,3 +43,14 @@ class RoomsResource(Resource):
             'success': True,
             'data': results
         }, 200
+
+class RoomResource(Resource):
+    def get(self, *args, **kwargs):
+        room_id = int(bleach.clean(kwargs['room_id'].strip()))
+        room = db.session.query(Room).filter_by(id=room_id).one()
+
+        results = _room_payload(room)
+        return {
+            'success': True,
+            'data': results
+        }, 200
