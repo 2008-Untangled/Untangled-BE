@@ -36,13 +36,13 @@ class GetRoomTest(unittest.TestCase):
       assert_payload_field_type_value(self, data, 'success', bool, True)
       
       results = data['data']
-
+     
       assert_payload_field_type_value(
-            self, results, 'name', str, self.room_2.name
+            self, results, 'name', str, room_2.name
         )
       assert_payload_field_type_value(
-          self, results, 'image', str, self.room_2.image
+          self, results, 'image', str, room_2.image
       )
       assert_payload_field_type_value(
-          self, results, 'user_id', str, self.user_1.id
+          self, results, 'user_id', int, user_1.id
       )
