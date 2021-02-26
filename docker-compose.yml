@@ -3,15 +3,20 @@ version: '3.8'
 services:
   api:
     build: .
-    depends_on:
-      - db
-    environment:
-      - DATABASE_URL=postgresql://username:password@localhost:5432/untangled-db
+    # depends_on:
+    #   - db
+    # environment:
+    #   - DATABASE_URL=postgresql://username:password@localhost:5432/untangled_dev
     networks:
       - default
     ports:
       - 5000:5000
-    restart: always
+    # entrypoint:
+    #   - python3
+    #   - manage.py
+    #   - db
+    #   - upgrade
+    # restart: always
     links:
       - db
   
@@ -19,9 +24,10 @@ services:
     image: postgres:9.6
     networks:
       - default
-    ports:
-      - 5432:5432
-    restart: always
+    # ports:
+    #   - 5432:5432
+    # restart: always
     environment: 
       - POSTGRES_USER=username
       - POSTGRES_PASSWORD=password
+      - POSTGRES_DB=untangled_dev
