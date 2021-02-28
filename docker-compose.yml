@@ -2,9 +2,7 @@ version: '3.8'
 
 services:
   api:
-    build:
-      context: .
-      dockerfile: Dockerfile.api
+    build: .
     depends_on:
       - db
     networks:
@@ -15,9 +13,7 @@ services:
 
   
   db:
-    build:
-      context: .
-      dockerfile: Dockerfile.db
+    image: postgres:9.6-alpine
     networks:
       - default
     ports:
@@ -29,4 +25,4 @@ services:
 
  # Create tables and seed database
  
- # cat untangled_dev.sql | docker exec -i 24ec43736f92 psql --username=username --dbname=untangled_dev
+ # cat untangled_dev.sql | docker exec -i <db_container_id> psql --username=username --dbname=untangled_dev
