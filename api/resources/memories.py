@@ -30,7 +30,8 @@ def _memory_payload(memory):
         'song': memory.song,
         'description': memory.description,
         'aromas': memory.aromas,
-        'location': memory.location,
+        'x': memory.x,
+        'y': memory.y,
         'room_id': memory.room_id
     }
 

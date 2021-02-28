@@ -107,10 +107,11 @@ class Memory(db.Model):
     song = Column(String(255))
     description = Column(String(255))
     aromas = Column(String(80))
-    location = Column(String(80))
+    x = Column(Integer)
+    y = Column(Integer)
     room_id = Column(Integer, ForeignKey('rooms.id'))
 
-    def __init__(self, image, song, description, aromas, location, room_id):
+    def __init__(self, image, song, description, aromas, x, y, room_id):
         if image is not None:
             image = bleach.clean(image).strip()
             if image == '':
@@ -131,16 +132,22 @@ class Memory(db.Model):
             if aromas == '':
                 aromas = None
 
-        if location is not None:
-            location = bleach.clean(location).strip()
-            if location == '':
-                location = None
+        if x is not None:
+            # x = bleach.clean(x).strip()
+            if x == '':
+                x = None
+
+        if y is not None:
+            # y = bleach.clean(y).strip()
+            if y == '':
+                y = None
 
         self.image = image
         self.song = song
         self.description = description
         self.aromas = aromas
-        self.location = location
+        self.x = x
+        self.y = y
         self.room_id = room_id
 
     def insert(self):

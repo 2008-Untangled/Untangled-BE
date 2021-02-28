@@ -26,9 +26,9 @@ class GetAllMemoriesTest(GetMemoriesTest):
     user_1.insert()
     room_1 = Room(name='Kitchen', image='exampleimage1.com', user_id=user_1.id)
     room_1.insert()
-    memory_1 = Memory(image='Picture string', song='song url', description='This is a great memory', aromas='Roast in the oven', location='table', room_id=room_1.id)
+    memory_1 = Memory(image='Picture string', song='song url', description='This is a great memory', aromas='Roast in the oven', x = 123, y = 456, room_id=room_1.id)
     memory_1.insert()
-    memory_2 = Memory(image='Another string', song='this song url', description='Love this memory', aromas='Chestnuts roasting', location='counter', room_id=room_1.id)
+    memory_2 = Memory(image='Another string', song='this song url', description='Love this memory', aromas='Chestnuts roasting', x = 678, y = 234, room_id=room_1.id)
     memory_2.insert()
 
     response = self.client.get(
@@ -56,7 +56,10 @@ class GetAllMemoriesTest(GetMemoriesTest):
       self, first_result, 'aromas', str, memory_1.aromas
     )
     assert_payload_field_type_value(
-      self, first_result, 'location', str, memory_1.location
+      self, first_result, 'x', int, memory_1.x
+    )
+    assert_payload_field_type_value(
+      self, first_result, 'y', int, memory_1.y
     )
     assert_payload_field_type_value(
       self, first_result, 'room_id', int, memory_1.room_id
@@ -76,7 +79,10 @@ class GetAllMemoriesTest(GetMemoriesTest):
       self, second_result, 'aromas', str, memory_2.aromas
     )
     assert_payload_field_type_value(
-      self, second_result, 'location', str, memory_2.location
+      self, second_result, 'x', int, memory_2.x
+    )
+    assert_payload_field_type_value(
+      self, second_result, 'y', int, memory_2.y
     )
     assert_payload_field_type_value(
       self, second_result, 'room_id', int, memory_2.room_id
