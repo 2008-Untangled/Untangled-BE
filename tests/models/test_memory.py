@@ -23,7 +23,7 @@ class AppTest(unittest.TestCase):
         user.insert()
         room = Room(name='Kitchen', image='exampleimage1.com', user_id=user.id)
         room.insert()
-        memory = Memory(image='Picture string', song='song url', description='This is a great memory', aromas='Roast in the oven', location='table', room_id=room.id)
+        memory = Memory(image='Picture string', song='song url', description='This is a great memory', aromas='Roast in the oven', room_id=room.id, x = 414, y = 346)
         memory.insert()
 
         self.assertIsInstance(memory, Memory)
@@ -32,5 +32,6 @@ class AppTest(unittest.TestCase):
         self.assertEqual('song url', memory.song)
         self.assertEqual('This is a great memory', memory.description)
         self.assertEqual('Roast in the oven', memory.aromas)
-        self.assertEqual('table', memory.location)
+        self.assertEqual(414, memory.x)
+        self.assertEqual(346, memory.y)
         self.assertEqual(room.id, memory.room_id)
