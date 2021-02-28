@@ -47,3 +47,52 @@ class MemoriesResource(Resource):
             'success': True,
             'data': results
         }, 200
+
+class MemoryResource(Resource):
+    def patch(self, *args, **kwargs):
+        memory_id = int(bleach.clean(kwargs['memory_id'].strip()))
+        memory = None
+        try: memory = db.session.query(Memory).filter_by(id=memory_id).one()
+        except NoResultFound:
+            return abort(404)
+
+        preceed = True
+        errors = []
+        data = json.loads(request.data)
+        proceed, description, errors = _validate_field(
+            data, 'description', preceed, errors, missing_okay=True)
+        proceed, image, errors = _validate_field(
+            data, 'image', preceed, errors, missing_okay=True)
+        proceed, song, errors = _validate_field(
+            data, 'song', preceed, errors, missing_okay=True)
+        proceed, aromas, errors = _validate_field(
+            data, 'aromas', preceed, errors, missing_okay=True)
+        proceed, x, errors = _validate_field(
+            data, 'x', preceed, errors, missing_okay=True)
+        proceed, y, errors = _validate_field(
+            data, 'y', preceed, errors, missing_okay=True)
+
+        if not preceed:
+            return {
+                'success': False,
+                'error': 400,
+                'errors': errors
+            }, 400
+
+        if description:
+            memory.description = description
+        if image:
+            memory.image = description
+        if song:
+            memory.song = description
+        if aromas:
+            memory.aromas = description
+        if x:
+            memory.x = description
+        if y:
+            memory.y = description
+        memory.update()
+
+        memory_payload = _memory_payload(memory)
+        memory_payload['success'] = True
+        return memory_payload, 200
