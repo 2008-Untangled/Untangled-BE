@@ -1,0 +1,28 @@
+version: '3.8'
+
+services:
+  api:
+    build: .
+    depends_on:
+      - db
+    networks:
+      - default
+    ports:
+      - 5000:5000
+    restart: always
+
+  
+  db:
+    image: postgres:9.6-alpine
+    networks:
+      - default
+    ports:
+      - 5432:5432
+    environment: 
+      - POSTGRES_USER=username
+      - POSTGRES_PASSWORD=password
+      - POSTGRES_DB=untangled_dev
+
+ # Create tables and seed database
+ 
+ # cat untangled_dev.sql | docker exec -i <db_container_id> psql --username=username --dbname=untangled_dev
