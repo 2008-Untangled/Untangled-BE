@@ -2,32 +2,31 @@ version: '3.8'
 
 services:
   api:
-    build: .
-    # depends_on:
-    #   - db
-    # environment:
-    #   - DATABASE_URL=postgresql://username:password@localhost:5432/untangled_dev
+    build:
+      context: .
+      dockerfile: Dockerfile.api
+    depends_on:
+      - db
     networks:
       - default
     ports:
       - 5000:5000
-    # entrypoint:
-    #   - python3
-    #   - manage.py
-    #   - db
-    #   - upgrade
-    # restart: always
-    links:
-      - db
+    restart: always
+
   
   db:
-    image: postgres:9.6
+    build:
+      context: .
+      dockerfile: Dockerfile.db
     networks:
       - default
-    # ports:
-    #   - 5432:5432
-    # restart: always
+    ports:
+      - 5432:5432
     environment: 
       - POSTGRES_USER=username
       - POSTGRES_PASSWORD=password
       - POSTGRES_DB=untangled_dev
+
+ # Create tables and seed database
+ 
+ # cat untangled_dev.sql | docker exec -i 24ec43736f92 psql --username=username --dbname=untangled_dev
