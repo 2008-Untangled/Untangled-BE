@@ -9,7 +9,7 @@ from tests import db_drop_everything, assert_payload_field_type_value, \
     assert_payload_field_type
 
 
-class PatchuserTest(unittest.TestCase):
+class PatchmemoryTest(unittest.TestCase):
     def setUp(self):
         self.app = create_app('testing')
         self.app_context = self.app.app_context()
@@ -24,10 +24,9 @@ class PatchuserTest(unittest.TestCase):
         self.memory_1 = Memory(image='Picture string', song='song url', description='This is a great memory', aromas='Roast in the oven', x = 123, y = 456, room_id=self.room_1.id)
         self.memory_1.insert()
 
-        # adding extra padding in here to ensure we strip() it off later
         self.payload = {
-            'image': 'new picture',
-            'description': 'This is a different memory',
+            'image': 'new_image',
+            'description': 'new_description',
             'x': 200,
             'y': 500
         }
@@ -59,30 +58,29 @@ class PatchuserTest(unittest.TestCase):
 
         # Fetching that memory and checking if it is updated
         response = self.client.get(
-          f'/api/v1/rooms/{room_1.id}/memories'
+          f'/api/v1/rooms/{self.room_1.id}/memories'
         )
-        results = data['data']
-        first_result = results[0]
+
         assert_payload_field_type_value(
-          self, first_result, 'image', str, 'new picture'
-        )
-        assert_payload_field_type_value(
-          self, first_result, 'song', str, memory_1.song
+          self, data, 'image', str, 'new_image'
         )
         assert_payload_field_type_value(
-          self, first_result, 'description', str, 'This is a different memory'
+          self, data, 'song', str, self.memory_1.song
         )
         assert_payload_field_type_value(
-          self, first_result, 'aromas', str, memory_1.aromas
+          self, data, 'description', str, 'new_description'
         )
         assert_payload_field_type_value(
-          self, first_result, 'x', int, 200
+          self, data, 'aromas', str, self.memory_1.aromas
         )
         assert_payload_field_type_value(
-          self, first_result, 'y', int, 500
+          self, data, 'x', int, 200
         )
         assert_payload_field_type_value(
-          self, first_result, 'room_id', int, memory_1.room_id
+          self, data, 'y', int, 500
+        )
+        assert_payload_field_type_value(
+          self, data, 'room_id', int, self.memory_1.room_id
         )
 
     def test_sadpath_patch_user_bad_id(self):
