@@ -9,8 +9,8 @@ from sqlalchemy.orm.exc import NoResultFound
 from api import db
 from api.database.models import User, Room, Memory
 
-def _validate_field(data, field, proceed, errors, missing_okay=False):
-    if field in data:
+def _validate_field(data, field, proceed, errors, memory, missing_okay=False):
+    if field in data and type(data[field]) is str:
         # sanitize the user input here
         data[field] = bleach.clean(data[field].strip())
         if len(data[field]) == 0:
@@ -20,6 +20,8 @@ def _validate_field(data, field, proceed, errors, missing_okay=False):
         proceed = False
         errors.append(f"required '{field}' parameter is missing")
         data[field] = ''
+    if missing_okay and field not in data:
+        data[field] = getattr(memory, field)
 
     return proceed, data[field], errors
 
@@ -56,23 +58,23 @@ class MemoryResource(Resource):
         except NoResultFound:
             return abort(404)
 
-        preceed = True
+        proceed = True
         errors = []
         data = json.loads(request.data)
-        proceed, description, errors = _validate_field(
-            data, 'description', preceed, errors, missing_okay=True)
         proceed, image, errors = _validate_field(
-            data, 'image', preceed, errors, missing_okay=True)
+            data, 'image', proceed, errors, memory, missing_okay=True)
         proceed, song, errors = _validate_field(
-            data, 'song', preceed, errors, missing_okay=True)
+            data, 'song', proceed, errors, memory, missing_okay=True)
+        proceed, description, errors = _validate_field(
+            data, 'description', proceed, errors, memory, missing_okay=True)
         proceed, aromas, errors = _validate_field(
-            data, 'aromas', preceed, errors, missing_okay=True)
+            data, 'aromas', proceed, errors, memory, missing_okay=True)
         proceed, x, errors = _validate_field(
-            data, 'x', preceed, errors, missing_okay=True)
+            data, 'x', proceed, errors, memory, missing_okay=True)
         proceed, y, errors = _validate_field(
-            data, 'y', preceed, errors, missing_okay=True)
+            data, 'y', proceed, errors, memory, missing_okay=True)
 
-        if not preceed:
+        if not proceed:
             return {
                 'success': False,
                 'error': 400,
@@ -82,15 +84,15 @@ class MemoryResource(Resource):
         if description:
             memory.description = description
         if image:
-            memory.image = description
+            memory.image = image
         if song:
-            memory.song = description
+            memory.song = song
         if aromas:
-            memory.aromas = description
+            memory.aromas = aromas
         if x:
-            memory.x = description
+            memory.x = x
         if y:
-            memory.y = description
+            memory.y = y
         memory.update()
 
         memory_payload = _memory_payload(memory)
