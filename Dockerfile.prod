@@ -19,10 +19,10 @@ RUN apt-get update && \
 # lint
 RUN pip install --upgrade pip
 RUN pip install flake8
-COPY . /usr/src/app/
+COPY ./ /usr/src/app/
 
 # install python dependencies
-COPY ./requirements.txt .
+COPY ./requirements.txt ./
 RUN pip wheel --no-cache-dir --no-deps --wheel-dir /usr/src/app/wheels -r requirements.txt
 
 

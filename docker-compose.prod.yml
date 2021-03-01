@@ -18,7 +18,7 @@ services:
       - ./.env.prod.db
   nginx:
     build: ./services/nginx
-    ports:
-      - 1337:80
+    expose:
+      - 80
     depends_on:
       - api    
