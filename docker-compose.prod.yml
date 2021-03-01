@@ -1,0 +1,24 @@
+version: '3.8'
+
+services:
+  api:
+    build:
+      context: .
+      dockerfile: Dockerfile.prod
+    command: gunicorn --bind 0.0.0.0:5000 manage:app
+    expose:
+      - 5000
+    env_file:
+      - ./.env.prod
+    depends_on:
+      - db
+  db:
+    image: postgres:9.6-alpine
+    env_file:
+      - ./.env.prod.db
+  nginx:
+    build: ./services/nginx
+    expose:
+      - 80
+    depends_on:
+      - api    

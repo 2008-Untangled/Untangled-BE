@@ -1,18 +1,63 @@
+sudo: required
 language: python
-python:
-- '3.9.1'
 services:
-- postgresql
+  - docker
+  - postgresql
 addons:
   postgresql: '9.6'
-install:
-- pip install -r requirements.txt
+
+before_install:
+  - docker build -t untangled-be -f Dockerfile.test .
+
 before_script:
 - psql --version
 - psql -c 'create database untangled_test;' -U postgres
 - python manage.py db upgrade
+
+# before_script:
+#   - docker run -e CI=true untangled-be pytest
+  # - docker run -e CI=true untangled-be /bin/bash -c "export PSQL_DIR=/usr/local/pgsql/bin/"
+  # - docker run -e CI=true untangled-be /bin/bash -c "export PATH="$PSQL_DIR:$PATH""
+  # - docker start untangled-be
+  # - docker run -e CI=true untangled-be /bin/bash -c "EXPORT psql_location=`locate psql`"
+  # - docker run -e CI=true untangled-be /bin/bash -c "ln -s $psql_location /usr/bin/psql"
+  # - docker run -e CI=true untangled-be /bin/bash -c "psql -c 'create database untangled_test;' -U username"
+  # - docker run -e POSTGRES_USER=username -e POSTGRES_PASSWORD=password -e POSTGRES_DB=untangled_test library/postgres:9.6-alpine
+#   - docker run /bin/bash "pg_ctl -D /var/lib/postgresql/data -l logfile start"
+#   - docker run /bin/bash -c "python3 manage.py db upgrade"
+
 script:
-- pytest
+  # - docker run -e CI=true untangled-be /bin/bash -c "python3 manage.py db upgrade; pytest"
+  - pytest
+  # - docker run -e CI=true untangled-be pytest
+  # - docker run /bin/bash -c "pytest"
+
+deploy:
+  provider: elasticbeanstalk
+  region: "us-east-2"
+  app: "Untangled"
+  env: "Untangled-env"
+  bucket_name: "elasticbeanstalk-us-east-2-725149889425"
+  bucket_path: "Untangled"
+  on:
+    branch: main
+  access_key_id: $AWS_ACCESS_KEY
+  secret_access_key: $AWS_SECRET_KEY
+# language: python
+# python:
+# - '3.9.1'
+# services:
+# - postgresql
+# addons:
+#   postgresql: '9.6'
+# install:
+# - pip install -r requirements.txt
+# before_script:
+# - psql --version
+# - psql -c 'create database untangled_test;' -U postgres
+# - python manage.py db upgrade
+# script:
+# - pytest
 # deploy:
 #   provider: heroku
 #   api_key:
