@@ -9,7 +9,7 @@ addons:
 before_install:
   - docker build -t untangled-be -f Dockerfile.test .
 
-# before_script:
+before_script:
 #   - docker run -e CI=true untangled-be pytest
   # - docker run -e CI=true untangled-be /bin/bash -c "export PSQL_DIR=/usr/local/pgsql/bin/"
   # - docker run -e CI=true untangled-be /bin/bash -c "export PATH="$PSQL_DIR:$PATH""
