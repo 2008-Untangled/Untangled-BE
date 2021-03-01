@@ -19,9 +19,9 @@ before_script:
 #   - docker run /bin/bash -c "python3 manage.py db upgrade"
 
 script:
-  - docker run -e CI=true untangled-be /bin/bash -c "python3 manage.py db upgrade; pytest"
-  # - docker run -e CI=true untangled-be pytest
-  # - docker run /bin/bash -c "pytest"
+  # - docker run -e CI=true untangled-be /bin/bash -c "python3 manage.py db upgrade; pytest"
+  - docker run -e CI=true untangled-be pytest
+  - docker run /bin/bash -c "pytest"
 # language: python
 # python:
 # - '3.9.1'
