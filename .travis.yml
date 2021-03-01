@@ -8,7 +8,8 @@ before_install:
 
 # before_script:
 #   - docker run -e CI=true untangled-be pytest
-  - docker run -e POSTGRES_USER=username -e POSTGRES_PASSWORD=password -e POSTGRES_DB=untangled_test library/postgres:9.6-alpine
+  - docker run -e CI=true untangled-be /bin/bash -c "psql -c 'create database untangled_test;' -U postgres"
+  # - docker run -e POSTGRES_USER=username -e POSTGRES_PASSWORD=password -e POSTGRES_DB=untangled_test library/postgres:9.6-alpine
 #   - docker run /bin/bash "pg_ctl -D /var/lib/postgresql/data -l logfile start"
 #   - docker run /bin/bash -c "python3 manage.py db upgrade"
 
