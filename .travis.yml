@@ -2,6 +2,9 @@ sudo: required
 language: python
 services:
   - docker
+  - postgresql
+addons: 
+  postgresql: "13.1"
 
 before_install:
   - docker build -t untangled-be -f Dockerfile.test .
