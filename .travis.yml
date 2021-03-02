@@ -20,10 +20,10 @@ script:
 deploy:
   provider: elasticbeanstalk
   region: "us-east-2"
-  app: "Untangled"
-  env: "Untangled-env"
+  app: "Untangled-BE"
+  env: "Untangledbe-env"
   bucket_name: "elasticbeanstalk-us-east-2-725149889425"
-  bucket_path: "Untangled"
+  bucket_path: "Untangled-BE"
   on:
     branch: docker-production
   access_key_id: $AWS_ACCESS_KEY
