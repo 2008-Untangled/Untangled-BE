@@ -5,6 +5,7 @@ services:
     build:
       context: .
       dockerfile: Dockerfile.prod
+    image: jessemellinger/api
     command: gunicorn --bind 0.0.0.0:5000 manage:app
     expose:
       - 5000
@@ -18,7 +19,9 @@ services:
       - ./.env.prod.db
   nginx:
     build: ./services/nginx
+    image: jessemellinger/nginx
     expose:
       - 80
     depends_on:
-      - api    
+      - api 
+    
