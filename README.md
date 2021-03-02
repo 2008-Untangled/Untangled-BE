@@ -1,58 +1,41 @@
-# Python 3, Flask 1.1.2, Flask-RESTful, PostgreSQL, TDD with Coverage, Travis-CI and Heroku
+# Untangled Backend
 
-Whew, that's a mouthful. I should come up with a more clever name.
+<!-- PROJECT SHIELDS -->
+[![Contributors][contributors-shield]][contributors-url]
+[![Forks][forks-shield]][forks-url]
+[![Stargazers][stars-shield]][stars-url]
+[![Issues][issues-shield]][issues-url]
+[![Build Status](https://travis-ci.com/travis-ci/travis-web.svg?branch=master)](https://www.travis-ci.com/github/2008-Untangled/Untangled-BE)
 
-![Agent Coulson, Iron Man, explaining the long name of SHIELD](https://thumbs.gfycat.com/OldfashionedCrazyAmericanbittern-size_restricted.gif)
+  <h3 align="center">Untangled Backend</h3>
 
-I'm often asked by students at [Turing](https://turing.io) to help them get
-started with Python projects, usually in Flask. So here's a way to scale that
-knowledge and get everyone started all in one place.
+  <p align="center">
+    This is the Back End repository for the <a href="https://github.com/2008-Untangled">Untangled</a> application, which works in tandem with the <a href="https://github.com/2008-Untangled/Untangled-FE">Untangled Frontend Repository</a>. This Backend piece returns information to the Front End through API requests.
+    <br />
+    <a href="https://github.com/2008-Untangled/Untangled-BE"><strong>Explore the docs »</strong></a>
+    <br />
+    <br />
+    <!-- for adding a demo video
+    <a href="Add our video link here">View Demo</a>  · -->
+    ·
+    <a href="https://github.com/2008-Untangled/Untangled-BE/issues">Report Bug</a>
+    ·
+    <a href="https://github.com/2008-Untangled/Untangled-BE/issues">Request Feature</a>
+  </p>
+</p>
 
 ### Table of Contents
 
-1. [What this Repo is](#what-this-repo-is)
-1. [What this Repo is Not](#what-this-repo-is-not)
-1. [What to do after cloning](#what-do-to-after-cloning)
 1. [Virtual Environment setup](#virtual-environment-setup)
-1. [Requirements](#requirements), aka "requirements.txt"
 1. [Database Setup](#database-setup)
-1. [Heroku Procfile](#heroku-procfile)
-1. [Travis-CI setup](#travis-ci-setup)
-1. [Configuration Secret](#configuration-secret)
-1. [Running tests](#running-tests)
-1. [Command Line Things](#command-line-things)
-1. [Endpoints](#endpoints) to get you started
+1. [Running Tests](#runing-tests)
+1. [Endpoints](#endpoints)
+1. [Endpoints Table](#endpoints-table)
+1. [Database Schema](#database-schema)
+1. [Roadmap](#roadmap)
+1. [Contributing](#contributing)
+1. [Contact](#contact)
 
-
-## What this Repo is
-
-A quick and easy way to get rolling with Python 3, Flask 1.1.2, the
-Flask-RESTful framework for building an API, database storage with PostgreSQL,
-TDD with test coverage built in, and deployment notes on continuous integration
-with Travis-CI which deploys to Heroku afterward.
-
-This is a shell of a project with a single 'users' table, and RESTful routes
-to CRUD a user via JSON. Full happy path and sad path testing is included. It
-sets up CORS as well.
-
-
-## What this Repo is Not
-
-This is not a step-by-step guide of how to use Python, Flask, Flask-RESTful,
-PostgreSQL, SQLalchemy, Travis-CI or Heroku. There are other learning channels
-for that.
-
-
-## What do to after cloning
-
-You don't have to fork this repo unless you want to contribute back to it in
-the future.
-
-After you clone this repo, delete the `.git` folder. This is your project, not
-mine. I don't need to show up as a contributor on other projects out there.
-Giving me a footnote credit in your own README back to this repo is enough.
-
-Then, do everything under here:
 
 
 ## Virtual Environment setup
@@ -73,70 +56,11 @@ To shut off your virtual environment, run `deactivate` at a terminal where you
 have an active virtual environment.
 
 
-## Requirements
-
-Here's a brief explanation of what's in the requirements.txt file and why:
-
-Flask setup:
-```
-Flask==1.1.2
-Flask-RESTful==0.3.8
-```
-
-Database setup:
-```
-Flask-SQLAlchemy==2.4.4
-psycopg2-binary==2.8.6
-SQLAlchemy==1.3.19
-flask_migrate==2.5.3
-```
-
-Cool command-line processor:
-```
-flask-script==2.0.6
-```
-
-CORS setup
-```
-Flask-Cors==3.0.9
-```
-
-Security, will "sanitize" user input; also recommend sanitizing things on the
-way OUT of your database as well
-```
-bleach==3.2.1
-```
-
-Testing stuff
-```
-pytest==6.1.0
-coverage==5.3
-```
-
-Production WSGI
-```
-gunicorn==20.0.4
-```
-
-Python code styling checks
-```
-pep8==1.7.1
-pycodestyle==2.6.0
-```
-
-To run the code style checks, run this:
-```bash
-pycodestyle .| grep -v "venv\|migrations"
-```
-
-
 ## Database Setup
 
-Let's assume your project is called "shield":
-
 ```bash
-createdb shield_dev
-createdb shield_test
+createdb untangled_dev
+createdb untangled_test
 
 export DATABASE_URL=postgresql://localhost:5432/untangled_dev
 
@@ -149,6 +73,9 @@ python3 manage.py db upgrade
 # then apply the same for your test database:
 export DATABASE_URL=postgresql://localhost:5432/untangled_test
 python3 manage.py db upgrade
+
+# you can seed your database with:
+python3 manage.py db_seed
 
 ```
 
@@ -172,50 +99,11 @@ postgresql://username:password@hostname:port/database_name
 ```
 
 
-## Heroku Procfile
-
-The Profile provided should be all you need.
-
-```
-web: gunicorn run:app
-```
-
-At a high level, `gunicorn` is a production-ready HTTP request/response
-handler. It will execute your "runner" file, in this case the `run:` portion
-of the Procfile references your `run.py` script. If you change the runner
-filename, you'll need to change it here too (just without the .py extension).
-
-The `:app` portion references the variable in `run.py` on line 10 that it uses
-to actually execute your Flask application.
-
-
-## Travis-CI Setup
-
-Check the `.travis.yml` file. You'll need to update a database name in there,
-and set up your Heroku stuff.
-
-I recommend making a copy of the contents of this file, and then running
-`travis setup heroku` and allow it to overwrite what it needs, then paste back
-in the parts that the setup removes.
-
-
-## Configuration Secret
-
-Be sure to generate a long random string and set an environment variable
-called SECRET_KEY on your local environment and especially on Heroku.
-
-
 ## Running Tests
-
-Here's where I nerd out on testing.
-
-I hand this repo to you with 100% test coverage in 27 tests with 132 assertions
-just to check on a handful of user crud endpoints.
 
 If you just want to run your tests, `pytest` by itself will do the job.
 
-If you want some cool test coverage reports similar to SimpleCov, you can do
-the following:
+In order to return a test coverage report run:
 ```bash
 # remove any previous test caching, previous coverage reports, and a database
 # of coverage data from the last time you ran this
@@ -237,20 +125,6 @@ open coverage_html_report/index.html
 grep -R assert tests | grep '.py:' | wc -l
 ```
 
-
-## Command Line Things
-
-The 'flask-script' package allows you to set up custom commands, similar to
-rake tasks in Rails.
-
-run `python3 manage.py routes` to see a list of your endpoint routes:
-```
-Map([<Rule '/api/v1/users' (POST, GET, HEAD, OPTIONS) -> usersresource>,
- <Rule '/api/v1/users/<user_id>' (PATCH, DELETE, GET, OPTIONS, HEAD) -> userresource>,
- <Rule '/static/<filename>' (OPTIONS, GET, HEAD) -> static>])
-```
-
-I also have one called "db_seed" if you need something to pre-seed a database.
 
 ## Endpoints
 
@@ -421,10 +295,72 @@ Response Body: (TBD)
 }
 ```
 
-#### FE <--> BE Contract:
+## Endpoints Table
 | Purpose | URL | Verb | Request Body | Sample Success Response |
 |----|----|----|----|----|
-| Get User |`/users/:id`| GET | | <pre>{<br> "data": {<br>   "user": {<br>     "id": `<int>`,<br>     "name": `<string>`,<br>     "email": `<string>`,<br>    }<br>  }<br>}</pre>
-| Get Rooms |`/users/:id/rooms`| GET || <pre>{<br>  "data": {<br>    "rooms": [ {<br>      "id": `<int>`, <br>      "name": `<str>`, <br>     },]<br>  }<br>} </pre>|
-| Get Room |`/rooms/:id`| GET | | <pre>{<br>  "data": {<br>    id: `<int>`<br>    name: `<str>`<br>    image: `<str>`<br>  }<br>}    |
-| Get Memories |`/rooms/:id/memories`| GET | | <pre> {<br>   "data": {<br>     "memories": [<br>       {<br>        id: `<int>`,<br>        description: `<string>`,<br>        image: `<string>`,<br>        song: `<string>`,<br>        aromas: `<str>`,<br>        x: `<int>`,<br>        y: `<int>`<br>   },<br>        {<br>        id: `<int>`,<br>        description: `<string>`,<br>        image: `<string>`,<br>        song: `<string>`,<br>        aromas: `<str>`,<br>        x: `<int>`,<br>        y: `<int>`<br>        },<br>      ]<br>    }<br>} </pre> |
+| Get User |`/users/:id`| GET | | <pre>{<br> "data": {<br>   "user": {<br>     "id": `<int>`,<br>     "name": "`<string>`",<br>     "email": "`<string>`"<br>    }<br>  }<br>}</pre>
+| Get Rooms |`/users/:id/rooms`| GET || <pre>{<br>  "data": {<br>    "rooms": [<br>    {<br>      "id": `<int>`, <br>      "name": "`<string>`", <br>      "image": "`<string>`",<br>      "user_id": `<int>`<br>     }<br>    ]<br>  }<br>} </pre>|
+| Get Room |`/rooms/:id`| GET | | <pre>{<br>  "data": {<br>    "id": `<int>`<br>    "name": "`<string>`"<br>    "image": "`<string>`",<br>    "user_id": `<int>`<br>  }<br>}    |
+| Get Memories |`/rooms/:id/memories`| GET | | <pre> {<br>   "data": {<br>     "memories": [<br>       {<br>        "id": `<int>`,<br>        "description": "`<string>`",<br>        "image": "`<string>`",<br>        "song": "`<string>`",<br>        "aromas": "`<string>`",<br>        "x": `<int>`,<br>        "y": `<int>`,<br>        "room_id": `<int>`<br>       },<br>       {<br>        "id": `<int>`,<br>        "description": "`<string>`",<br>        "image": "`<string>`",<br>        "song": "`<string>`",<br>        "aromas": "`<string>`",<br>        "x": `<int>`,<br>        "y": `<int>`,<br>        "room_id": `<int>`<br>       }<br>     ]<br>    }<br>} </pre> |
+
+
+<!-- DB SCHEMA -->
+## Database Schema
+<img alt="Database Schema" src="https://user-images.githubusercontent.com/65255478/109689580-aae31980-7b42-11eb-8ac5-6d932ae06945.png">
+
+<!-- ROADMAP -->
+## Roadmap
+
+See [Open Issues](https://github.com/2008-Untangled/Music-Service-API/issues) or visit our [Project Board](https://github.com/orgs/2008-Untangled/projects/1) for a list of proposed features, known issues, and project extensions.
+
+
+<!-- CONTRIBUTING -->
+## Contributing
+
+Contributions are what make this community such an amazing and fun place to learn, grow, and create! Any contributions you make are **greatly appreciated**.
+
+1. Fork the Project
+2. Create your Feature Branch ```git checkout -b feature/NewGreatFeature```
+3. Commit your Changes ```git commit -m 'Add some NewGreatFeature'```
+4. Push to the Branch ```git push origin feature/NewGreatFeature```
+5. Open a new Pull Request!
+
+
+<!-- CONTACT -->
+## Contact
+
+Bryce Jarrett &nbsp;&nbsp;&nbsp;&nbsp; - [![LinkedIn][linkedin-shield]](https://www.linkedin.com/in/bryce-jarrett/) - [GitHub](https://github.com/brycemara)
+
+Cameron Romo &nbsp; - [![LinkedIn][linkedin-shield]](https://www.linkedin.com/in/cameron-romo-64b3a69b/) - [GitHub](https://github.com/cameronRomo)
+
+Joe Lopez &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; - [![LinkedIn][linkedin-shield]](https://www.linkedin.com/in/joseph-lopez-100/) - [GitHub](https://github.com/Codo-Baggins)
+
+Estelle Staffieri &nbsp; - [![LinkedIn][linkedin-shield]](https://www.linkedin.com/in/estellestaffieri/) - [GitHub](https://github.com/Estaffieri)
+
+Grant Dempsey &nbsp;- [![LinkedIn][linkedin-shield]](https://www.linkedin.com/in/grant-dempsey-8a9a16169/) - [GitHub](https://github.com/GDemps)
+
+Eduardo Parra &nbsp;&nbsp;&nbsp; - [![LinkedIn][linkedin-shield]](https://www.linkedin.com/in/eduardo--parra/) - [GitHub](https://github.com/helloeduardo)
+
+Jesse Mellinger &nbsp;&nbsp;- [![LinkedIn][linkedin-shield]](https://www.linkedin.com/in/jesse-mellinger/) - [GitHub](https://github.com/JesseMellinger)
+
+Sean Steel &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;- [![LinkedIn][linkedin-shield]](https://www.linkedin.com/in/sean-steel/) - [GitHub](https://github.com/s-steel)
+
+
+
+Project Link: [Untangled](https://github.com/2008-Untangled)
+
+
+
+<!-- ACKNOWLEDGEMENTS -->
+<!-- Add resources that were used to help create this project here -->
+
+<!-- MARKDOWN LINKS & IMAGES -->
+[contributors-shield]: https://img.shields.io/github/contributors/2008-Untangled/Untangled-BE
+[contributors-url]: https://github.com/2008-Untangled/Untangled-BE/graphs/contributors
+[forks-shield]: https://img.shields.io/github/forks/2008-Untangled/Untangled-BE
+[forks-url]: https://github.com/2008-Untangled/Untangled-BE/network/members
+[stars-shield]: https://img.shields.io/github/stars/2008-Untangled/Untangled-BE
+[stars-url]: https://github.com/2008-Untangled/Untangled-BE/stargazers
+[issues-shield]: https://img.shields.io/github/issues/2008-Untangled/Untangled-BE
+[issues-url]: https://github.com/2008-Untangled/Untangled-BE/issues
+[linkedin-shield]: https://img.shields.io/badge/-LinkedIn-black.svg?style=flat-square&logo=linkedin&colorB=555
