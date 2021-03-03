@@ -294,14 +294,16 @@ Response Body: (TBD)
   }
 }
 ```
-
 ## Endpoints Table
+`https://untangled-be.herokuapp.com/api/v1`
 | Purpose | URL | Verb | Request Body | Sample Success Response |
 |----|----|----|----|----|
-| Get User |`/users/:id`| GET | | <pre>{<br> "data": {<br>   "user": {<br>     "id": `<int>`,<br>     "name": "`<string>`",<br>     "email": "`<string>`"<br>    }<br>  }<br>}</pre>
-| Get Rooms |`/users/:id/rooms`| GET || <pre>{<br>  "data": {<br>    "rooms": [<br>    {<br>      "id": `<int>`, <br>      "name": "`<string>`", <br>      "image": "`<string>`",<br>      "user_id": `<int>`<br>     }<br>    ]<br>  }<br>} </pre>|
-| Get Room |`/rooms/:id`| GET | | <pre>{<br>  "data": {<br>    "id": `<int>`<br>    "name": "`<string>`"<br>    "image": "`<string>`",<br>    "user_id": `<int>`<br>  }<br>}    |
-| Get Memories |`/rooms/:id/memories`| GET | | <pre> {<br>   "data": {<br>     "memories": [<br>       {<br>        "id": `<int>`,<br>        "description": "`<string>`",<br>        "image": "`<string>`",<br>        "song": "`<string>`",<br>        "aromas": "`<string>`",<br>        "x": `<int>`,<br>        "y": `<int>`,<br>        "room_id": `<int>`<br>       },<br>       {<br>        "id": `<int>`,<br>        "description": "`<string>`",<br>        "image": "`<string>`",<br>        "song": "`<string>`",<br>        "aromas": "`<string>`",<br>        "x": `<int>`,<br>        "y": `<int>`,<br>        "room_id": `<int>`<br>       }<br>     ]<br>    }<br>} </pre> |
+| Get Users |`/users`| GET | | <pre>{<br>   "success": true,<br>   "results": [<br>     {<br>       "id": `<int>`,<br>       "name": "`<string>`"<br>       "email": "`<string>`"<br>     }<br>   ]<br>}</pre>
+| Get User |`/users/:id`| GET | | <pre>{<br>    "id": `<int>`,<br>    "name": "`<string>`",<br>    "email": "`<string>`"<br>    "success": ture<br>}</pre>
+| Get Rooms |`/users/:id/rooms`| GET || <pre>{<br>  "success": true,<br>  "data": [<br>    {<br>      "id": `<int>`, <br>      "name": "`<string>`", <br>      "image": "`<string>`",<br>      "user_id": `<int>`<br>     },<br>     {...}<br>   ]<br>} </pre>|
+| Get Room |`/rooms/:id`| GET | | <pre>{<br>  "success": true,<br>  "data": {<br>    "id": `<int>`<br>    "name": "`<string>`"<br>    "image": "`<string>`",<br>    "user_id": `<int>`<br>  }<br>}    |
+| Get Memories |`/rooms/:id/memories`| GET | | <pre> {<br>   "success": true,<br>   "data": [<br>       {<br>        "id": `<int>`,<br>        "description": "`<string>`",<br>        "image": "`<string>`",<br>        "song": "`<string>`",<br>        "aromas": "`<string>`",<br>        "x": `<int>`,<br>        "y": `<int>`,<br>        "room_id": `<int>`<br>       },<br>       {<br>        "id": `<int>`,<br>        "description": "`<string>`",<br>        "image": "`<string>`",<br>        "song": "`<string>`",<br>        "aromas": "`<string>`",<br>        "x": `<int>`,<br>        "y": `<int>`,<br>        "room_id": `<int>`<br>       }<br>    ]<br>} </pre> |
+| Edit a Memory |`/memories/:id`| PATCH | <pre>{<br>  "description": "`<string>`",<br>  "image": "`<string>`",<br>  "song": "`<string>`",<br>  "aromas": "`<string>`",<br>  "x": `<int>`,<br>  "y": `<int>`<br>}</pre>| <pre> {<br>   "success": true,<br>   "data": {<br>        "id": `<int>`,<br>        "description": "`<string>`",<br>        "image": "`<string>`",<br>        "song": "`<string>`",<br>        "aromas": "`<string>`",<br>        "x": `<int>`,<br>        "y": `<int>`,<br>        "room_id": `<int>`<br>     }<br>} </pre> |
 
 
 <!-- DB SCHEMA -->
