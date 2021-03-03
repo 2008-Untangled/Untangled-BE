@@ -3,7 +3,7 @@
     "containerDefinitions":[
         {
             "name": "api",
-            "image": "jessemellinger/api",
+            "image": "jessemellinger/apiv2",
             "hostname": "api",
             "essential": true,
             "memory": 128,
