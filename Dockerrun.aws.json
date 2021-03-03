@@ -6,7 +6,12 @@
             "image": "jessemellinger/api",
             "hostname": "api",
             "essential": true,
-            "memory": 128
+            "memory": 128,
+            "command": [
+                "tail",
+                "-f",
+                "/bin/bash"
+            ]
         },
         {
             "name": "nginx",
@@ -20,7 +25,12 @@
                 }
             ],
             "links": ["api"],
-            "memory": 128
+            "memory": 128,
+            "command": [
+                "tail",
+                "-f",
+                "/bin/bash"
+            ]
         }
     ]
 }
