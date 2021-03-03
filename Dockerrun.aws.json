@@ -10,7 +10,7 @@
         },
         {
             "name": "nginx",
-            "image": "jessemellinger/nginx",
+            "image": "nginx:latest",
             "hostname": "nginx",
             "essential": true,
             "portMappings": [
