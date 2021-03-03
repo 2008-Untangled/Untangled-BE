@@ -26,6 +26,8 @@
 
 ### Table of Contents
 
+1. [About This Project](#about-this-project)
+   * [Built With](#built-with)
 1. [Virtual Environment setup](#virtual-environment-setup)
 1. [Database Setup](#database-setup)
 1. [Running Tests](#runing-tests)
@@ -37,6 +39,18 @@
 1. [Contact](#contact)
 
 
+## About This Project
+Visit [Untangled](https://github.com/2008-Untangled) to view all the repositories associated with this application.
+
+This Backend application stores all the relevant data needed for the Untangled application.  It has information for users, rooms, and memories, and allows for updates to users and memories.  It responds to the Frontend of the application through API requests and responses.  Scroll down to the endpoints section see what is available.  
+
+### Built With
+
+* [Python](https://www.python.org/)
+* [Flask](https://flask.palletsprojects.com/en/1.1.x/)
+* [Docker](https://www.docker.com/)
+* [Travis CI](https://www.travis-ci.com/)
+* [Heroku](https://www.heroku.com/)
 
 ## Virtual Environment setup
 
@@ -79,25 +93,6 @@ python3 manage.py db_seed
 
 ```
 
-Note that this pattern is different than Rails. You change your models, then
-you run the "migrate" tool which builds your migration file, then you apply the
-migration file to your database with the "upgrade" command.
-
-To roll back a database change, use "downgrade" instead of "upgrade".
-
-The code will use an environment variable called DATABASE_URL that you will
-need to set on Travis-CI and on Heroku. Your Travis-CI setting for this flag
-will be something like what you have above for your test database, since
-PostgreSQL will be running on "localhost" on Travis-CI.
-
-On Heroku, though, you'll need to get your database credentials from the Heroku
-user interface and it'll be a very long string that approximately follows this
-pattern:
-
-```
-postgresql://username:password@hostname:port/database_name
-```
-
 
 ## Running Tests
 
@@ -128,6 +123,10 @@ grep -R assert tests | grep '.py:' | wc -l
 
 ## Endpoints
 
+All endpoints can be reached at:
+```
+https://untangled-be.herokuapp.com/api/v1/
+```
 - GET and PATCH endpoints will return a 200 status code on success
 - POST endpoints will return a 201 status code on success
 - DELETE endpoints will return a 204 status code on success
@@ -140,100 +139,8 @@ and a JSON payload indicating helpful errors in a format such as:
   "message": "Resource not found"
 }
 ```
-
----
-#### GET /api/v1/users
-
-Description:
-- fetches all users in the database
-- returns 200 status code on success
-
-Required Request Headers:
-- none
-
-Required Request Body:
-- none
-
-Response Body: (TBD)
-```json
-{
-  "success": true,
-  "results": [
-    {
-      "id": 1,
-      "name": "ian",
-      "email": "ian.douglas@iandouglas.com",
-      "links": {
-        "get": "/api/v1/users/1",
-        "patch": "/api/v1/users/1",
-        "delete": "/api/v1/users/1",
-        "index": "/api/v1/users"
-      }
-    },
-    {...}
-  ]
-}
-```
-
----
-#### GET /api/v1/users/1
-
-Description:
-- fetches one user from the database
-- returns 200 status on success
-
-Required Request Headers:
-- none
-
-Required Request Body:
-- none
-
-Response Body: (TBD)
-```json
-{
-  "success": true,
-  "id": 1,
-  "name": "ian",
-  "email": "ian.douglas@iandouglas.com",
-  "links": {
-    "get": "/api/v1/users/1",
-    "patch": "/api/v1/users/1",
-    "delete": "/api/v1/users/1",
-    "index": "/api/v1/users"
-  }
-}
-```
-
----
-#### DELETE /api/v1/users/1
-
-Description:
-- deletes one user from the database
-- returns 204 status on success
-
-Required Request Headers:
-- none
-
-Required Request Body:
-- none
-
-Response Body: (TBD)
-- none
-
----
-#### POST /api/v1/users
-
-Description:
-- creates a user
-- returns 201 status code on success
-
-Required Request Headers:
-- none
-
-Required Request Body:
-- JSON payload of:
-  - 'name', required, must be unique, cannot be blank
-  - 'email', required, must be unique, cannot be blank
+#### GET request:  Require no headers or body. <br>
+#### PATCH request:  Require a body with the new information as a JSON payload.  For example, the body for a user patch request:
 ```json
 {
   "name": "ian",
@@ -241,69 +148,18 @@ Required Request Body:
 }
 ```
 
-Response Body: (TBD)
-- json payload indicating user was created, including RESTful routes
-  to edit/delete/get the user record
-```json
-{
-  "success": true,
-  "id": 1,
-  "name": "ian",
-  "email": "ian.douglas@iandouglas.com",
-  "links": {
-    "get": "/api/v1/users/1",
-    "patch": "/api/v1/users/1",
-    "delete": "/api/v1/users/1",
-    "index": "/api/v1/users"
-  }
-}
-```
-#### PATCH /api/v1/users/1
+---
 
-Description:
-- updates a user by ID
-
-Required Request Headers:
-- none
-
-Required Request Body:
-- JSON payload of:
-  - 'name', optional, must be unique, cannot be blank
-  - 'email', optional, must be unique, cannot be blank
-```json
-{
-  "name": "ian",
-  "email": "ian.douglas@iandouglas.com"
-}
-```
-
-Response Body: (TBD)
-- json payload indicating road trip was updated, including a restful route
-  to fetch road trip information
-```json
-{
-  "success": true,
-  "id": 1,
-  "name": "ian",
-  "email": "ian.douglas@iandouglas.com",
-  "links": {
-    "get": "/api/v1/users/1",
-    "patch": "/api/v1/users/1",
-    "delete": "/api/v1/users/1",
-    "index": "/api/v1/users"
-  }
-}
-```
 ## Endpoints Table
 `https://untangled-be.herokuapp.com/api/v1`
-| Purpose | URL | Verb | Request Body | Sample Success Response |
+| Description | URL | Verb | Request Body | Sample Success Response |
 |----|----|----|----|----|
-| Get Users |`/users`| GET | | <pre>{<br>   "success": true,<br>   "results": [<br>     {<br>       "id": `<int>`,<br>       "name": "`<string>`"<br>       "email": "`<string>`"<br>     }<br>   ]<br>}</pre>
-| Get User |`/users/:id`| GET | | <pre>{<br>    "id": `<int>`,<br>    "name": "`<string>`",<br>    "email": "`<string>`"<br>    "success": ture<br>}</pre>
-| Get Rooms |`/users/:id/rooms`| GET || <pre>{<br>  "success": true,<br>  "data": [<br>    {<br>      "id": `<int>`, <br>      "name": "`<string>`", <br>      "image": "`<string>`",<br>      "user_id": `<int>`<br>     },<br>     {...}<br>   ]<br>} </pre>|
-| Get Room |`/rooms/:id`| GET | | <pre>{<br>  "success": true,<br>  "data": {<br>    "id": `<int>`<br>    "name": "`<string>`"<br>    "image": "`<string>`",<br>    "user_id": `<int>`<br>  }<br>}    |
-| Get Memories |`/rooms/:id/memories`| GET | | <pre> {<br>   "success": true,<br>   "data": [<br>       {<br>        "id": `<int>`,<br>        "description": "`<string>`",<br>        "image": "`<string>`",<br>        "song": "`<string>`",<br>        "aromas": "`<string>`",<br>        "x": `<int>`,<br>        "y": `<int>`,<br>        "room_id": `<int>`<br>       },<br>       {<br>        "id": `<int>`,<br>        "description": "`<string>`",<br>        "image": "`<string>`",<br>        "song": "`<string>`",<br>        "aromas": "`<string>`",<br>        "x": `<int>`,<br>        "y": `<int>`,<br>        "room_id": `<int>`<br>       }<br>    ]<br>} </pre> |
-| Edit a Memory |`/memories/:id`| PATCH | <pre>{<br>  "description": "`<string>`",<br>  "image": "`<string>`",<br>  "song": "`<string>`",<br>  "aromas": "`<string>`",<br>  "x": `<int>`,<br>  "y": `<int>`<br>}</pre>| <pre> {<br>   "success": true,<br>   "data": {<br>        "id": `<int>`,<br>        "description": "`<string>`",<br>        "image": "`<string>`",<br>        "song": "`<string>`",<br>        "aromas": "`<string>`",<br>        "x": `<int>`,<br>        "y": `<int>`,<br>        "room_id": `<int>`<br>     }<br>} </pre> |
+| Get All Users |`/users`| GET | | <pre>{<br>   "success": true,<br>   "results": [<br>     {<br>       "id": `<int>`,<br>       "name": "`<string>`"<br>       "email": "`<string>`"<br>     }<br>   ]<br>}</pre>
+| Get A User By Id |`/users/:id`| GET | | <pre>{<br>    "id": `<int>`,<br>    "name": "`<string>`",<br>    "email": "`<string>`"<br>    "success": ture<br>}</pre>
+| Get All Rooms |`/users/:id/rooms`| GET || <pre>{<br>  "success": true,<br>  "data": [<br>    {<br>      "id": `<int>`, <br>      "name": "`<string>`", <br>      "image": "`<string>`",<br>      "user_id": `<int>`<br>     },<br>     {...}<br>   ]<br>} </pre>|
+| Get A Room By Id |`/rooms/:id`| GET | | <pre>{<br>  "success": true,<br>  "data": {<br>    "id": `<int>`<br>    "name": "`<string>`"<br>    "image": "`<string>`",<br>    "user_id": `<int>`<br>  }<br>}    |
+| Get All Memories For A Room |`/rooms/:id/memories`| GET | | <pre> {<br>   "success": true,<br>   "data": [<br>       {<br>        "id": `<int>`,<br>        "description": "`<string>`",<br>        "image": "`<string>`",<br>        "song": "`<string>`",<br>        "aromas": "`<string>`",<br>        "x": `<int>`,<br>        "y": `<int>`,<br>        "room_id": `<int>`<br>       },<br>       {<br>        "id": `<int>`,<br>        "description": "`<string>`",<br>        "image": "`<string>`",<br>        "song": "`<string>`",<br>        "aromas": "`<string>`",<br>        "x": `<int>`,<br>        "y": `<int>`,<br>        "room_id": `<int>`<br>       }<br>    ]<br>} </pre> |
+| Update a Memory By Id |`/memories/:id`| PATCH | <pre>{<br>  "description": "`<string>`",<br>  "image": "`<string>`",<br>  "song": "`<string>`",<br>  "aromas": "`<string>`",<br>  "x": `<int>`,<br>  "y": `<int>`<br>}</pre>| <pre> {<br>   "success": true,<br>   "data": {<br>        "id": `<int>`,<br>        "description": "`<string>`",<br>        "image": "`<string>`",<br>        "song": "`<string>`",<br>        "aromas": "`<string>`",<br>        "x": `<int>`,<br>        "y": `<int>`,<br>        "room_id": `<int>`<br>     }<br>} </pre> |
 
 
 <!-- DB SCHEMA -->
