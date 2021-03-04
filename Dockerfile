@@ -12,5 +12,5 @@ COPY . .
 
 EXPOSE 80
 
-CMD ["python3", "run.py"]
+# CMD ["python3", "run.py"]
 
