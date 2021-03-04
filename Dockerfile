@@ -13,4 +13,7 @@ COPY . .
 EXPOSE 80
 
 # CMD ["python3", "run.py"]
+ENTRYPOINT [ "python" ]
+
+CMD [ "run.py" ]
 
