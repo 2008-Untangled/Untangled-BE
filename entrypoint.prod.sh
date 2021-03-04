@@ -12,3 +12,23 @@ then
 fi
 
 exec "$@"
+
+# // {
+#         //     "name": "nginx",
+#         //     "image": "nginx:latest",
+#         //     "hostname": "nginx",
+#         //     "essential": true,
+#         //     "portMappings": [
+#         //         {
+#         //             "hostPort": 80,
+#         //             "containerPort": 80
+#         //         }
+#         //     ],
+#         //     "links": ["api"],
+#         //     "memory": 128,
+#         //     "command": [
+#         //         "tail",
+#         //         "-f",
+#         //         "/bin/bash"
+#         //     ]
+#         // }

@@ -1,5 +1,5 @@
 {
-    "AWSEBDockerrunVersion": 2,
+    "AWSEBDockerrunVersion": 1,
     "containerDefinitions":[
         {
             "name": "api",
@@ -7,25 +7,12 @@
             "hostname": "api",
             "essential": true,
             "memory": 128,
-            "command": [
-                "tail",
-                "-f",
-                "/bin/bash"
-            ]
-        },
-        {
-            "name": "nginx",
-            "image": "nginx:latest",
-            "hostname": "nginx",
-            "essential": true,
             "portMappings": [
                 {
                     "hostPort": 80,
-                    "containerPort": 80
+                    "containerPort": 5000
                 }
             ],
-            "links": ["api"],
-            "memory": 128,
             "command": [
                 "tail",
                 "-f",
