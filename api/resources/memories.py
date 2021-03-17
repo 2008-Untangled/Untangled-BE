@@ -9,7 +9,7 @@ from sqlalchemy.orm.exc import NoResultFound
 from api import db
 from api.database.models import User, Room, Memory
 
-def _validate_field(data, field, proceed, errors, memory, missing_okay=False):
+def _validate_field(data, field, proceed, errors, memory=None, missing_okay=False):
     if field in data and type(data[field]) is str:
         # sanitize the user input here
         data[field] = bleach.clean(data[field].strip())
@@ -49,6 +49,53 @@ class MemoriesResource(Resource):
             'success': True,
             'data': results
         }, 200
+
+    def post(self, *args, **kwargs):
+        room_id = kwargs['room_id']
+        memory, errors = self._create_memory(json.loads(request.data), room_id)
+        if memory is not None:
+            memory_payload = _memory_payload(memory)
+            memory_payload['success'] = True
+            return memory_payload, 201
+        else:
+            return {
+                'success': False,
+                'error': 400,
+                'errors': errors
+            }, 400
+
+    def _create_memory(self, data, room_id):
+        proceed = True
+        errors = []
+
+        proceed, memory_image, errors = _validate_field(
+            data, 'image', proceed, errors)
+        proceed, memory_song, errors = _validate_field(
+            data, 'song', proceed, errors)
+        proceed, memory_description, errors = _validate_field(
+            data, 'description', proceed, errors)
+        proceed, memory_aromas, errors = _validate_field(
+            data, 'aromas', proceed, errors)
+        proceed, memory_x, errors = _validate_field(
+            data, 'x', proceed, errors)
+        proceed, memory_y, errors = _validate_field(
+            data, 'y', proceed, errors)
+
+        if proceed:
+            memory = Memory(
+                image=memory_image,
+                song=memory_song,
+                description=memory_description,
+                aromas=memory_aromas,
+                x=memory_x,
+                y=memory_y,
+                room_id=room_id
+            )
+            db.session.add(memory)
+            db.session.commit()
+            return memory, errors
+        else:
+            return None, errors
 
 class MemoryResource(Resource):
     def get(self, *args, **kwargs):
