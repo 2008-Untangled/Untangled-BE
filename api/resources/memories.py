@@ -51,6 +51,18 @@ class MemoriesResource(Resource):
         }, 200
 
 class MemoryResource(Resource):
+    def get(self, *args, **kwargs):
+        memory_id = int(bleach.clean(kwargs['memory_id'].strip()))
+        memory = None
+        try:
+            memory = db.session.query(Memory).filter_by(id=memory_id).one()
+        except NoResultFound:
+            return abort(404)
+
+        user_payload = _user_payload(memory)
+        user_payload['success'] = True
+        return user_payload, 200
+
     def patch(self, *args, **kwargs):
         memory_id = int(bleach.clean(kwargs['memory_id'].strip()))
         memory = None
@@ -98,3 +110,14 @@ class MemoryResource(Resource):
         memory_payload = _memory_payload(memory)
         memory_payload['success'] = True
         return memory_payload, 200
+
+    def delete(self, *args, **kwargs):
+        memory_id = kwargs['memory_id']
+        memory = None
+        try:
+            memory = db.session.query(Memory).filter_by(id=memory_id).one()
+        except NoResultFound:
+            return abort(404)
+
+        memory.delete()
+        return {}, 204
