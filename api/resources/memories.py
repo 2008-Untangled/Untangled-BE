@@ -9,7 +9,7 @@ from sqlalchemy.orm.exc import NoResultFound
 from api import db
 from api.database.models import User, Room, Memory
 
-def _validate_field(data, field, proceed, errors, memory, missing_okay=False):
+def _validate_field(data, field, proceed, errors, memory=None, missing_okay=False):
     if field in data and type(data[field]) is str:
         # sanitize the user input here
         data[field] = bleach.clean(data[field].strip())
@@ -50,7 +50,66 @@ class MemoriesResource(Resource):
             'data': results
         }, 200
 
+    def post(self, *args, **kwargs):
+        room_id = kwargs['room_id']
+        memory, errors = self._create_memory(json.loads(request.data), room_id)
+        if memory is not None:
+            memory_payload = _memory_payload(memory)
+            memory_payload['success'] = True
+            return memory_payload, 201
+        else:
+            return {
+                'success': False,
+                'error': 400,
+                'errors': errors
+            }, 400
+
+    def _create_memory(self, data, room_id):
+        proceed = True
+        errors = []
+
+        proceed, memory_image, errors = _validate_field(
+            data, 'image', proceed, errors)
+        proceed, memory_song, errors = _validate_field(
+            data, 'song', proceed, errors)
+        proceed, memory_description, errors = _validate_field(
+            data, 'description', proceed, errors)
+        proceed, memory_aromas, errors = _validate_field(
+            data, 'aromas', proceed, errors)
+        proceed, memory_x, errors = _validate_field(
+            data, 'x', proceed, errors)
+        proceed, memory_y, errors = _validate_field(
+            data, 'y', proceed, errors)
+
+        if proceed:
+            memory = Memory(
+                image=memory_image,
+                song=memory_song,
+                description=memory_description,
+                aromas=memory_aromas,
+                x=memory_x,
+                y=memory_y,
+                room_id=room_id
+            )
+            db.session.add(memory)
+            db.session.commit()
+            return memory, errors
+        else:
+            return None, errors
+
 class MemoryResource(Resource):
+    def get(self, *args, **kwargs):
+        memory_id = int(bleach.clean(kwargs['memory_id'].strip()))
+        memory = None
+        try:
+            memory = db.session.query(Memory).filter_by(id=memory_id).one()
+        except NoResultFound:
+            return abort(404)
+
+        user_payload = _user_payload(memory)
+        user_payload['success'] = True
+        return user_payload, 200
+
     def patch(self, *args, **kwargs):
         memory_id = int(bleach.clean(kwargs['memory_id'].strip()))
         memory = None
@@ -98,3 +157,14 @@ class MemoryResource(Resource):
         memory_payload = _memory_payload(memory)
         memory_payload['success'] = True
         return memory_payload, 200
+
+    def delete(self, *args, **kwargs):
+        memory_id = kwargs['memory_id']
+        memory = None
+        try:
+            memory = db.session.query(Memory).filter_by(id=memory_id).one()
+        except NoResultFound:
+            return abort(404)
+
+        memory.delete()
+        return {}, 204
