@@ -40,3 +40,16 @@ class DeletememoryTest(unittest.TestCase):
             f'/api/v1/memories/{self.memory_1.id}'
         )
         self.assertEqual(404, response.status_code)
+
+    def test_sadpath_delete_bad_id_memory(self):
+        response = self.client.delete(
+            f'/api/v1/memories/9999999'
+        )
+        self.assertEqual(404, response.status_code)
+
+        data = json.loads(response.data.decode('utf-8'))
+        assert_payload_field_type_value(self, data, 'error', int, 404)
+        assert_payload_field_type_value(self, data, 'success', bool, False)
+        assert_payload_field_type_value(
+            self, data, 'message', str, 'resource not found'
+        )
