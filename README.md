@@ -10,7 +10,7 @@
   <h3 align="center">Untangled Backend</h3>
 
   <p align="center">
-    This is the Back End repository for the <a href="https://github.com/2008-Untangled">Untangled</a> application, which works in tandem with the <a href="https://github.com/2008-Untangled/Untangled-FE">Untangled Frontend Repository</a>. This Backend piece returns information to the Front End through API requests.
+    This project was made from the idea of helping those with Dementia and Alzheimers recall memories using the memory palace technique. This is the Back End repository for the <a href="https://github.com/2008-Untangled">Untangled</a> application, which works in tandem with the <a href="https://github.com/2008-Untangled/Untangled-FE">Untangled Frontend Repository</a>. This Back End application returns information to the Front End through API requests.
     <br />
     <a href="https://github.com/2008-Untangled/Untangled-BE"><strong>Explore the docs »</strong></a>
     <br />
@@ -30,7 +30,8 @@
    * [Built With](#built-with)
 1. [Virtual Environment setup](#virtual-environment-setup)
 1. [Database Setup](#database-setup)
-1. [Running Tests](#runing-tests)
+1. [Running Locally](#running-locally)
+1. [Running Tests](#running-tests)
 1. [Endpoints](#endpoints)
 1. [Endpoints Table](#endpoints-table)
 1. [Database Schema](#database-schema)
@@ -93,6 +94,16 @@ python3 manage.py db_seed
 
 ```
 
+## Running Locally
+To run the application in your local dev environment run:
+```bash
+python3 run.py
+```
+
+You may now access API endpoints locally at:
+```
+http://localhost:5000/api/v1/
+```
 
 ## Running Tests
 
@@ -159,7 +170,9 @@ and a JSON payload indicating helpful errors in a format such as:
 | Get All Rooms |`/users/:id/rooms`| GET || <pre>{<br>  "success": true,<br>  "data": [<br>    {<br>      "id": `<int>`, <br>      "name": "`<string>`", <br>      "image": "`<string>`",<br>      "user_id": `<int>`<br>     },<br>     {...}<br>   ]<br>} </pre>|
 | Get A Room By Id |`/rooms/:id`| GET | | <pre>{<br>  "success": true,<br>  "data": {<br>    "id": `<int>`<br>    "name": "`<string>`"<br>    "image": "`<string>`",<br>    "user_id": `<int>`<br>  }<br>}    |
 | Get All Memories For A Room |`/rooms/:id/memories`| GET | | <pre> {<br>   "success": true,<br>   "data": [<br>       {<br>        "id": `<int>`,<br>        "description": "`<string>`",<br>        "image": "`<string>`",<br>        "song": "`<string>`",<br>        "aromas": "`<string>`",<br>        "x": `<int>`,<br>        "y": `<int>`,<br>        "room_id": `<int>`<br>       },<br>       {<br>        "id": `<int>`,<br>        "description": "`<string>`",<br>        "image": "`<string>`",<br>        "song": "`<string>`",<br>        "aromas": "`<string>`",<br>        "x": `<int>`,<br>        "y": `<int>`,<br>        "room_id": `<int>`<br>       }<br>    ]<br>} </pre> |
+| Create a Memory |`/rooms/:id/memories`| POST | <pre>{<br>  "description": "`<string>`",<br>  "image": "`<string>`",<br>  "song": "`<string>`",<br>  "aromas": "`<string>`",<br>  "x": `<int>`,<br>  "y": `<int>`<br>}</pre>| <pre> {<br>    "id": `<int>`,<br>    "description": "`<string>`",<br>    "image": "`<string>`",<br>    "song": "`<string>`",<br>    "aromas": "`<string>`",<br>    "x": `<int>`,<br>    "y": `<int>`,<br>    "room_id": `<int>`,<br>    "success": true     <br>} </pre> |
 | Update a Memory By Id |`/memories/:id`| PATCH | <pre>{<br>  "description": "`<string>`",<br>  "image": "`<string>`",<br>  "song": "`<string>`",<br>  "aromas": "`<string>`",<br>  "x": `<int>`,<br>  "y": `<int>`<br>}</pre>| <pre> {<br>   "success": true,<br>   "data": {<br>        "id": `<int>`,<br>        "description": "`<string>`",<br>        "image": "`<string>`",<br>        "song": "`<string>`",<br>        "aromas": "`<string>`",<br>        "x": `<int>`,<br>        "y": `<int>`,<br>        "room_id": `<int>`<br>     }<br>} </pre> |
+| Delete a Memory |`/memories/:id`| DELETE | | <pre> Returns 204 No Content </pre> |
 
 
 <!-- DB SCHEMA -->
